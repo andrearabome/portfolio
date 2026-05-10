@@ -10,6 +10,13 @@
     transition: background-color 260ms cubic-bezier(.22,.9,.3,1), color 260ms cubic-bezier(.22,.9,.3,1), border-color 260ms cubic-bezier(.22,.9,.3,1), box-shadow 260ms cubic-bezier(.22,.9,.3,1);
 }
 
+/* When swapping page content we briefly disable color transitions to avoid
+   flashes between theme states while the DOM updates. Applied/removed by router.js */
+html.disable-transitions,
+html.disable-transitions *{
+    transition: none !important;
+}
+
 
 a{
     text-decoration: none;

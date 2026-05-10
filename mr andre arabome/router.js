@@ -59,7 +59,19 @@
         // Replace notepad-row content
         const notepadsRow = document.querySelector('.notepad-row');
         if(notepadsRow){
+            // temporarily disable theme/color transitions to avoid a visible
+            // flash when swapping DOM that may reflow colors
+            const root = document.documentElement;
+            root.classList.add('disable-transitions');
+
             notepadsRow.innerHTML = content;
+
+            // ensure browser paints new content, then re-enable transitions
+            requestAnimationFrame(()=>{
+                requestAnimationFrame(()=>{
+                    root.classList.remove('disable-transitions');
+                });
+            });
         }
         
         // Update current page tracker
