@@ -1,11 +1,12 @@
 /*@import url();*/
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
+/* Use a Windows-like system font stack */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: Tahoma, "Segoe UI", system-ui, -apple-system, Inter, sans-serif;
 }
 
 a{
@@ -137,22 +138,24 @@ basiks .links a.active{
     background: #000;
 }
 
-.about .right a.online,
-footer a.online{
+.about .right .online,
+footer .online{
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    width: fit-content;
+    white-space: nowrap;
     background: #171717;
     border: 1px solid #27272A;
-    padding: 4px 15px;
+    padding: 4px 12px;
     border-radius: 14px;
-    font-size: 13px;
+    font-size: 12px;
+    color: #89CFF0;
 }
-
-.about .right a.online i,
-footer a.online i{
-    color: #4CAF50;
+.about .right .online i,
+footer .online i{
+    color: #89CFF0;
     font-size: 9px;
 }
 
@@ -411,4 +414,349 @@ footer .socials a{
         font-size: 13px;
     }
 
+}
+
+/* Windows XP visual theme additions */
+body{
+    background: linear-gradient(#7db9e8, #9ad0ff);
+    color: #000;
+}
+
+/* Notepad-style windows (for About page) */
+.notepad{
+    margin: 18px 0;
+    border: 2px solid #7aa7e9;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.12);
+    overflow: hidden;
+}
+
+/* layout the three notepad sections across the page */
+.notepad-row{
+    /* positioned canvas for randomly-placed notepads */
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 72px);
+    margin: 0;
+    margin-left: calc(-50vw + 50%);
+}
+.notepad-row .notepad{
+    position: absolute;
+    width: calc(33% - 12px);
+    min-width: 220px;
+}
+
+@media (max-width: 768px){
+    /* responsive fallback: stacked flow */
+    .notepad-row{ position: static; min-height: auto; }
+    .notepad-row .notepad{ position: static; width: 100%; min-width: 0; margin-bottom: 12px; }
+}
+.notepad .titlebar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(#0b61b8,#0d6fcf);
+    color: #fff;
+    padding: 6px 10px;
+    font-weight: 700;
+}
+.notepad .titlebar{ cursor: move; user-select: none; }
+
+/* Resize handle (bottom-right corner) */
+
+/* Desktop-style resize handles */
+.notepad .resize-handle{
+    position: absolute;
+    z-index: 12000;
+    touch-action: none;
+}
+.notepad .resize-handle.top,
+.notepad .resize-handle.bottom{ left: 10px; right: 10px; height: 8px; }
+.notepad .resize-handle.left,
+.notepad .resize-handle.right{ top: 10px; bottom: 10px; width: 8px; }
+.notepad .resize-handle.top{ top: -4px; cursor: ns-resize; }
+.notepad .resize-handle.bottom{ bottom: -4px; cursor: ns-resize; }
+.notepad .resize-handle.left{ left: -4px; cursor: ew-resize; }
+.notepad .resize-handle.right{ right: -4px; cursor: ew-resize; }
+.notepad .resize-handle.corner{
+    width: 18px;
+    height: 18px;
+}
+.notepad .resize-handle.nw{ top: -4px; left: -4px; cursor: nwse-resize; }
+.notepad .resize-handle.ne{ top: -4px; right: -4px; cursor: nesw-resize; }
+.notepad .resize-handle.se{ right: -4px; bottom: -4px; cursor: nwse-resize; }
+.notepad .resize-handle.sw{ left: -4px; bottom: -4px; cursor: nesw-resize; }
+.notepad .resize-handle::after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.01);
+}
+
+.notepad.minimized .resize-handle{ display: none; }
+
+@media (max-width: 768px){
+    .notepad .resize-handle{ display: none; }
+}
+.notepad .titlebar .title{ font-size: 14px; }
+.notepad .titlebar .controls span{ margin-left: 8px; cursor: default; }
+.notepad .notepad-content{ padding: 12px; background: #fff; color: #000; }
+.notepad .notepad-content pre{ white-space: pre-wrap; font-family: Consolas, "Courier New", monospace; font-size: 14px; line-height: 1.45; }
+
+@media (max-width: 768px){
+    .notepad .notepad-content pre{ font-size: 13px; }
+}
+
+/* Notepad dark-mode & window behavior */
+.notepad.minimized .notepad-content{ display: none; height: 0; padding: 0 12px; }
+.notepad .titlebar .controls span{ user-select: none; }
+
+/* Dark-mode adjustments for Notepad windows */
+.dark .notepad{
+    background: #0b1220;
+    border-color: #223244;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+}
+.dark .notepad .titlebar{
+    background: linear-gradient(#071124,#09203a);
+    color: var(--titlebar-text);
+}
+.dark .notepad .notepad-content{
+    background: #071124;
+    color: var(--text-color);
+}
+
+/* small touch for close (hidden) state */
+.notepad.hidden{ display: none !important; }
+
+.xp-desktop{
+    margin: 0;
+    padding: 0;
+    padding-bottom: 72px; /* keep content above the fixed taskbar */
+}
+
+/* Make header look like a window title bar */
+basiks{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+basiks .links{
+    background: linear-gradient(#0b61b8,#0d6fcf);
+    border: 2px solid #032b5b;
+    border-radius: 6px;
+    padding: 10px 20px;
+}
+
+basiks .links a{
+    color: #fff;
+    font-weight: 600;
+}
+
+.about, .works .left, .works .right .item, footer{
+    background: #e9f4ff;
+    border: 2px solid #7aa7e9;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.12);
+    border-radius: 4px;
+    color: #000;
+}
+
+.about{
+    padding: 18px;
+}
+
+.about .left .info h2{
+    color: #032b5b;
+}
+
+.about .left .info p,
+.works .left .works-list .item > p,
+.works .left .works-list .item .work-info p{
+    color: #033a6b;
+}
+
+/* Taskbar */
+#taskbar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    background: linear-gradient(#0b61b8,#084b91);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.25);
+    z-index: 9999;
+}
+
+#taskbar .start button{
+    background: linear-gradient(#39ff14, #00e600);
+    border: 2px solid #0aa000;
+    padding: 4px 8px;
+    min-width: 72px;
+    height: 32px;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    box-shadow: 0 0 12px rgba(57,255,20,0.55), inset 0 -2px 6px rgba(0,0,0,0.12);
+}
+
+#taskbar .start button:hover{
+    filter: brightness(1.06);
+    box-shadow: 0 0 18px rgba(57,255,20,0.8), inset 0 -2px 6px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
+}
+
+/* ensure Start text is readable on neon background */
+#taskbar .start button .start-text{ color: #001100; }
+
+#taskbar .tray{
+    margin-left: auto;
+    color: #fff;
+    font-weight: 600;
+}
+
+#start-button img{ width:20px; height:20px; display:block; }
+.start-text{ font-weight:700; color:var(--titlebar-text); font-size:14px; }
+
+/* footer removed — ensure content stays above the taskbar via .xp-desktop padding */
+
+/* Theme variables (light by default) */
+:root{
+    --bg-grad: url('lightpaper.png');
+    --panel-bg: #e9f4ff;
+    --panel-border: #7aa7e9;
+    --text-color: #000;
+    --titlebar-bg: linear-gradient(#0b61b8,#0d6fcf);
+    --taskbar-bg: linear-gradient(#0b61b8,#084b91);
+    --titlebar-text: #fff;
+    --link-color: #0d6fcf;
+}
+
+/* Dark theme overrides */
+.dark{
+    --bg-grad: url('vanitas.png');
+    --panel-bg: #0f1724;
+    --panel-border: #1f2937;
+    --text-color: #e5e7eb;
+    --titlebar-bg: linear-gradient(#0b1220,#07101a);
+    --taskbar-bg: linear-gradient(#081221,#04060a);
+    --titlebar-text: #dbeafe;
+    --link-color: #35D7FF;
+}
+
+/* Apply variables where possible to support dark mode */
+body{ background: var(--bg-grad); color: var(--text-color); }
+body{
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+basiks .links{ background: var(--titlebar-bg); }
+basiks .links a{ color: var(--titlebar-text); }
+.about, .works .left, .works .right .item, footer{ background: var(--panel-bg); border: 2px solid var(--panel-border); color: var(--text-color); }
+#taskbar{ background: var(--taskbar-bg); }
+#taskbar .tray{ color: var(--titlebar-text); }
+
+/* Taskbar center buttons for notepads */
+.taskbar-center{ display:flex; gap:2px; align-items:center; padding-left:0; flex:1 1 auto; min-width:0; overflow:hidden; }
+.taskbar-center .taskbar-notepad-btn{
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(0,0,0,0.12);
+    color: var(--titlebar-text);
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+.taskbar-center .taskbar-notepad-btn.closed{
+    opacity: 0.5;
+    filter: grayscale(40%);
+}
+.taskbar-center .taskbar-notepad-btn:focus{ outline: 2px solid rgba(255,255,255,0.12); }
+
+.theme-btn{ background: transparent; border: none; color: var(--titlebar-text); font-size: 18px; cursor: pointer; padding: 6px 8px; }
+.theme-btn:focus{ outline: 2px solid rgba(255,255,255,0.2); }
+
+/* Start menu panel */
+.start-menu{
+    position: fixed;
+    left: 12px;
+    bottom: 48px; /* sit above taskbar */
+    width: 240px;
+    background: var(--panel-bg);
+    border: 2px solid var(--panel-border);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.14);
+    border-radius: 4px;
+    padding: 8px;
+    display: none;
+    z-index: 40000;
+}
+.start-menu.open{ display: block; }
+.start-menu-open .notepad,
+.start-menu-open .taskbar-center .taskbar-notepad-btn,
+.start-menu-open .xp-desktop > *:not(.start-menu):not(#taskbar){
+    pointer-events: none;
+}
+.start-menu .start-menu-header{
+    font-weight: 700;
+    color: var(--titlebar-text);
+    background: var(--titlebar-bg);
+    padding: 6px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+}
+.start-menu ul{ list-style: none; }
+.start-menu li{ margin: 6px 0; }
+.start-menu a{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--text-color);
+    padding: 6px 8px;
+    border-radius: 3px;
+}
+.start-menu a:hover{ background: rgba(0,0,0,0.06); color: var(--link-color); }
+.start-menu .icon{ width: 20px; text-align: center; }
+.start-menu .icon img{
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin: 0 auto;
+}
+
+.dark body,
+.dark .about,
+.dark .works .left,
+.dark .works .right .item,
+.dark footer,
+.dark .start-menu,
+.dark .start-menu a,
+.dark .works .left h3,
+.dark .works .left .works-list .item .work-info h5,
+.dark .works .left .works-list .item .work-info p,
+.dark .works .left .works-list .item > p,
+.dark .works .right .item a,
+.dark .works .right .item > p,
+.dark .about .left h2,
+.dark .about .left p,
+.dark .about .right .online,
+.dark footer .online,
+.dark .tray{
+    color: #fff;
+}
+
+.dark .start-menu a:hover{
+    color: #fff;
 }
