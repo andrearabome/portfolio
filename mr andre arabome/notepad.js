@@ -240,6 +240,9 @@ function initNotepadTaskbar(){
     const taskbarCenter = document.querySelector('.taskbar-center');
     if(!taskbarCenter) return;
 
+    // Clear existing taskbar buttons to avoid duplicates when reinitializing
+    taskbarCenter.querySelectorAll('.taskbar-notepad-btn').forEach(b => b.remove());
+
     const pads = Array.from(container.querySelectorAll('.notepad'));
     pads.forEach((p, idx)=>{
         const id = p.dataset.note || `notepad-${idx}`;
@@ -252,8 +255,18 @@ function initNotepadTaskbar(){
         btn.type = 'button';
         btn.textContent = title;
         btn.dataset.target = id;
-        btn.setAttribute('aria-pressed', 'false');
-        btn.classList.add('closed');
+
+        // Reflect current state: closed if hidden, pressed if visible and not minimized
+        if(p.classList.contains('hidden')){
+            btn.classList.add('closed');
+            btn.setAttribute('aria-pressed','false');
+        } else if(p.classList.contains('minimized')){
+            btn.classList.remove('closed');
+            btn.setAttribute('aria-pressed','false');
+        } else {
+            btn.classList.remove('closed');
+            btn.setAttribute('aria-pressed','true');
+        }
 
         btn.addEventListener('click', function(){
             const target = container.querySelector(`.notepad[data-note="${this.dataset.target}"]`);
@@ -261,7 +274,7 @@ function initNotepadTaskbar(){
             if(target.classList.contains('hidden')){
                 // reopen
                 target.classList.remove('hidden');
-                target.removeAttribute('aria-hidden');
+                target.setAttribute('aria-hidden','false');
                 target.classList.remove('minimized');
                 target.style.display = '';
                 placeNotepadsRandomly();

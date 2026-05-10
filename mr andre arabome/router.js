@@ -1,42 +1,28 @@
 (function(){
-    const PAGES = {
-        'index.html': 'Home',
-        'about.html': 'About Me',
-        'projects.html': 'Projects'
+    const PAGE_MAP = {
+        '': 'index.html',
+        'home': 'index.html',
+        'about': 'about.html',
+        'projects': 'projects.html'
     };
 
-    let currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    let currentPage = null;
+    let isNavigating = false;
 
-    function getPageName(){
-        const path = window.location.pathname.split('/').pop() || 'index.html';
-        return path;
-    }
-
-    function normalizePageName(page){
-        if(!page || page === '') return 'index.html';
-        if(!page.endsWith('.html')) return page + '.html';
-        return page;
-    }
-
-    function createHistoryState(page){
-        return {
-            page: normalizePageName(page),
-            timestamp: Date.now()
-        };
+    function getPageFromHash(){
+        const hash = window.location.hash.slice(1).toLowerCase() || '';
+        return PAGE_MAP[hash] || 'index.html';
     }
 
     async function loadPageContent(page){
-        const normalizedPage = normalizePageName(page);
-        
         try {
-            const response = await fetch(normalizedPage);
-            if(!response.ok) throw new Error(`Failed to load ${normalizedPage}`);
+            const response = await fetch(page);
+            if(!response.ok) throw new Error('Failed to load ' + page);
             
             const html = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             
-            // Extract the notepad-row content from the fetched page
             const newNotepadsRow = doc.querySelector('.notepad-row');
             if(!newNotepadsRow) throw new Error('No notepad-row found in page');
             
@@ -46,112 +32,68 @@
             return null;
         }
     }
-
     async function navigateToPage(page){
-        const normalizedPage = normalizePageName(page);
+        if(isNavigating || page === currentPage) return;
         
-        // Don't reload if already on the page
-        if(normalizedPage === currentPage) return;
+        isNavigating = true;
+        const content = await loadPageContent(page);
+        if(!content){
+            isNavigating = false;
+            return;
+        }
         
-        const content = await loadPageContent(normalizedPage);
-        if(!content) return;
+        // Disable transitions to prevent color flash
+        const root = document.documentElement;
+        root.classList.add('disable-transitions');
         
         // Replace notepad-row content
         const notepadsRow = document.querySelector('.notepad-row');
         if(notepadsRow){
-            // temporarily disable theme/color transitions to avoid a visible
-            // flash when swapping DOM that may reflow colors
-            const root = document.documentElement;
-            root.classList.add('disable-transitions');
-
             notepadsRow.innerHTML = content;
-
-            // ensure browser paints new content, then re-enable transitions
-            requestAnimationFrame(()=>{
-                requestAnimationFrame(()=>{
-                    root.classList.remove('disable-transitions');
-                });
-            });
         }
         
-        // Update current page tracker
-        currentPage = normalizedPage;
+        // Re-enable transitions after DOM paint
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                root.classList.remove('disable-transitions');
+            });
+        });
         
-        // Update browser history
-        const state = createHistoryState(normalizedPage);
-        const url = normalizedPage === 'index.html' ? './' : normalizedPage;
-        window.history.pushState(state, '', url);
+        currentPage = page;
         
-        // Reinitialize notepad handlers for new content
+        // Reinitialize all notepad handlers and taskbar
         if(window.initializeResizeHandles){
             window.initializeResizeHandles();
         }
-
-        // Clear existing taskbar buttons and recreate them for the new notepads
-        const taskbarCenter = document.querySelector('.taskbar-center');
-        if(taskbarCenter){
-            // remove previous buttons
-            taskbarCenter.innerHTML = '';
-        }
-
+        
         if(window.initNotepadTaskbar){
-            // small delay to mirror initial behavior
-            setTimeout(window.initNotepadTaskbar, 50);
+            window.initNotepadTaskbar();
         }
         
-        // Place notepads randomly (they're hidden by default anyway)
         if(window.placeNotepadsRandomly){
             window.placeNotepadsRandomly();
         }
         
-        // Reset the tab reminder timer
         if(window.resetTabReminder){
-            window.resetTabReminder();
+            const event = new CustomEvent('pagechange');
+            document.dispatchEvent(event);
         }
         
-        // Scroll to top
         window.scrollTo(0, 0);
+        isNavigating = false;
     }
 
-    function setupNavigationLinks(){
-        document.addEventListener('click', function(e){
-            // Check if clicked element is a navigation link
-            const link = e.target.closest('a[href]');
-            if(!link) return;
-            
-            const href = link.getAttribute('href');
-            
-            // Only handle internal page navigation
-            if(href === 'index.html' || href === 'about.html' || href === 'projects.html' || href === './'){
-                e.preventDefault();
-                navigateToPage(href);
-            }
-        });
-    }
-
-    function handleHistoryPopState(event){
-        if(event.state && event.state.page){
-            const page = event.state.page;
-            navigateToPage(page);
+    function handleHashChange(){
+        const newPage = getPageFromHash();
+        if(newPage !== currentPage){
+            navigateToPage(newPage);
         }
     }
 
     document.addEventListener('DOMContentLoaded', function(){
-        // Set up navigation link interception
-        setupNavigationLinks();
+        currentPage = getPageFromHash();
+        navigateToPage(currentPage);
         
-        // Handle back/forward button
-        window.addEventListener('popstate', handleHistoryPopState);
-        
-        // Initialize the current page in history
-        const initialState = createHistoryState(currentPage);
-        window.history.replaceState(initialState, '');
+        window.addEventListener('hashchange', handleHashChange);
     });
-
-    // Expose resetTabReminder function for tabreminder.js to call
-    window.resetTabReminder = function(){
-        // Notify tabreminder.js to reset
-        const event = new CustomEvent('pagechange');
-        document.dispatchEvent(event);
-    };
 })();
