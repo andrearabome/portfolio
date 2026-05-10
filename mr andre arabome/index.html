@@ -10,27 +10,41 @@
 </head>
 <body>
     <div class="xp-desktop">
-    <div class="about">
-        <div class="left">
-            <div class="info">
-                <h2>Andre Arabome</h2>
-                <p>𝘯𝘰𝘵 𝘦𝘷𝘦𝘳𝘺𝘰𝘯𝘦 𝘨𝘦𝘵𝘴 𝘵𝘰 𝘮𝘢𝘬𝘦 𝘵𝘩𝘦𝘪𝘳 𝘩𝘰𝘣𝘣𝘺 𝘪𝘯𝘵𝘰 𝘢 𝘥𝘳𝘦𝘢𝘮 𝘫𝘰𝘣, 𝘣𝘶𝘵 𝘐 𝘸𝘢𝘯𝘵 𝘵𝘰 𝘣𝘦 𝘥𝘪𝘧𝘧𝘦𝘳𝘦𝘯𝘵</p>
-                <p>Hi! I am an economics student at the University of Ottawa</p>
-                <p>Based in Guelph, Canada</p>
-                <p>Honours BSocSc. Economics</p>
-                <p>Minor in BSc Mathematics</p>
-            </div>
+        <div class="notepad-row">
+            <section class="notepad hidden" data-note="home">
+                <div class="titlebar">
+                    <div class="title">Andre Arabome - Notepad</div>
+                    <div class="controls"><span class="min">–</span><span class="max">▢</span><span class="close">✕</span></div>
+                </div>
+                <div class="notepad-content">
+<pre>𝘯𝘰𝘵 𝘦𝘷𝘦𝘳𝘺𝘰𝘯𝘦 𝘨𝘦𝘵𝘴 𝘵𝘰 𝘮𝘢𝘬𝘦 𝘵𝘩𝘦𝘪𝘳 𝘩𝘰𝘣𝘣𝘺 𝘪𝘯𝘵𝘰 𝘢 𝘥𝘳𝘦𝘢𝘮 𝘫𝘰𝘣, 𝘣𝘶𝘵 𝘐 𝘸𝘢𝘯𝘵 𝘵𝘰 𝘣𝘦 𝘥𝘪𝘧𝘧𝘦𝘳𝘦𝘯𝘵
+
+Hi! I am an economics student at the University of Ottawa
+
+Based in Guelph, Canada
+Honours BSocSc. Economics
+Minor in BSc Mathematics</pre>
+                </div>
+                <div class="resizer" aria-hidden="true"></div>
+            </section>
+
+            <section class="notepad hidden" data-note="status">
+                <div class="titlebar">
+                    <div class="title">Status - Notepad</div>
+                    <div class="controls"><span class="min">–</span><span class="max">▢</span><span class="close">✕</span></div>
+                </div>
+                <div class="notepad-content">
+<pre>🟢 Available For Work</pre>
+                </div>
+                <div class="resizer" aria-hidden="true"></div>
+            </section>
         </div>
-        <div class="right">
-            <div class="online" role="status"><i class="fas fa-circle"></i> Available For Work</div>
-        </div>
-    </div>
     <div id="start-menu" class="start-menu" aria-hidden="true">
         <div class="start-menu-header">Start</div>
         <ul>
-            <li><a href="#" id="start-theme-toggle"><span class="icon">🌓</span><span class="label">Dark Mode</span></a></li>
+            <li><a href="#" id="start-theme-toggle"><span class="icon">☀️</span><span class="label">Dark Mode</span></a></li>
             <li><a href="index.html"><span class="icon">🏠</span>Home</a></li>
-            <li><a href="about.html"><span class="icon">ℹ️</span>About Me</a></li>
+            <li><a href="about.html"><span class="icon">🐺</span>About Me</a></li>
             <li><a href="projects.html"><span class="icon">🗂️</span>Projects</a></li>
             <li><a href="https://github.com/andrearabome"><span class="icon">🐱</span>GitHub</a></li>
             <li><a href="https://ca.linkedin.com/in/andrearabome"><span class="icon">🔗</span>LinkedIn</a></li>
@@ -50,6 +64,9 @@
     </div>
     <script src="theme.js"></script>
     <script src="startmenu.js"></script>
+    <script src="notepad.js"></script>
+    <script src="router.js"></script>
+    <script src="tabreminder.js"></script>
     <script src="clock.js"></script>
 </body>
 

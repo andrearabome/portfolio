@@ -1,4 +1,27 @@
 document.addEventListener('click', function(e){
+    // manual-only toggle (gallery tab)
+    // - by default it should NOT show
+    // - clicking its tab should toggle it, without interfering with other notepads
+    if(e.target.matches('[data-manual-tab="manual-section"]')){
+        e.preventDefault();
+        const section = document.querySelector('.notepad[data-note="manual-section"]');
+        if(!section) return;
+        const isHidden = section.classList.contains('hidden');
+        const currentlyHiddenByClass = section.classList.contains('hidden') || section.classList.contains('aria-hidden-true');
+
+        if(isHidden || section.classList.contains('hidden')){
+            // reopen
+            section.classList.remove('hidden');
+            section.setAttribute('aria-hidden','false');
+            section.classList.remove('hidden');
+            section.classList.remove('minimized');
+        } else {
+            // hide
+            section.classList.add('hidden');
+            section.setAttribute('aria-hidden','true');
+        }
+    }
+
     // minimize
     if(e.target.matches('.notepad .controls .min')){
         const win = e.target.closest('.notepad');
@@ -200,6 +223,11 @@ window.addEventListener('resize', function(){
 });
 
 document.addEventListener('DOMContentLoaded', function(){
+    document.querySelectorAll('.notepad').forEach(win=>{
+        win.classList.add('hidden');
+        win.setAttribute('aria-hidden','true');
+    });
+
     // small delay to let layout settle
     setTimeout(placeNotepadsRandomly, 80);
     setTimeout(initializeResizeHandles, 90);
@@ -224,7 +252,8 @@ function initNotepadTaskbar(){
         btn.type = 'button';
         btn.textContent = title;
         btn.dataset.target = id;
-        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-pressed', 'false');
+        btn.classList.add('closed');
 
         btn.addEventListener('click', function(){
             const target = container.querySelector(`.notepad[data-note="${this.dataset.target}"]`);
@@ -235,6 +264,7 @@ function initNotepadTaskbar(){
                 target.removeAttribute('aria-hidden');
                 target.classList.remove('minimized');
                 target.style.display = '';
+                placeNotepadsRandomly();
                 window.__notepadZIndex = (window.__notepadZIndex || 11000) + 1;
                 target.style.zIndex = window.__notepadZIndex;
                 this.classList.remove('closed');
